@@ -10,7 +10,7 @@ ENV REVISION="main"
 ENV LRU_CACHE_CAPACITY=1
 
 # Install transformers
-RUN pip install transformers==4.15.0 loguru==0.5.3
+RUN pip install transformers==4.15.0
 
 # Download Model
 COPY ./download_model.py ./donwload_model.py

@@ -1,15 +1,18 @@
 import gc
 import json
+import logging
 
 import torch
-from ts.torch_handler.base_handler import BaseHandler
+import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from loguru import logger
+from ts.torch_handler.base_handler import BaseHandler
+
+logger = logging.getLogger(__name__)
+logger.info("Transformers version %s", transformers.__version__)
 
 
 class TextGenerationHandler(BaseHandler):
     def __init__(self):
-        logger.info("Torch Serve Start")
         super(TextGenerationHandler, self).__init__()
         self.model_max_length = 512
         self.model = None
