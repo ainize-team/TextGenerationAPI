@@ -26,7 +26,6 @@ def define_arg_parser() -> Namespace:
     return parser.parse_args()
 
 
-# TODO: Split Code
 def main(config: Namespace):
     try:
         model = AutoModelForCausalLM.from_pretrained(config.pretrained_model_name_or_path, revision=config.revision)
