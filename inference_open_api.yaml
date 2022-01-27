@@ -1,0 +1,97 @@
+openapi: 3.0.1
+
+info:
+  title: TextGenerationAPI
+  description: |
+      Text Generation API using Huggingface Transformers
+  version: "0.1"
+paths:
+  /ping:
+    get:
+      tags:
+      - Health Check
+      responses:
+        '200':
+          description: get status of model server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                example:
+                  status: "Healthy"
+
+  /predictions/text-generation:
+    post:
+      tags:
+      - Inference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text_inputs:
+                  type: string
+                  example: My name is Thomas and my main
+                max_length:
+                  type: integer
+                  example: 20
+                min_length:
+                  type: integer
+                  example: 10
+                do_sample:
+                  type: boolean
+                  example: False
+                early_stopping:
+                  type: boolean
+                  example: False
+                num_beams:
+                  type: integer
+                  example: 1
+                temperature:
+                  type: number
+                  example: 1.0
+                top_k:
+                  type: integer
+                  example: 50
+                top_p:
+                  type: number
+                  example: 1.0
+                repetition_penalty:
+                  type: number
+                  example: 1.0
+                length_penalty:
+                  type: number
+                  example: 1.0
+                no_repeat_ngram_size:
+                  type: integer
+                  example: 0
+                num_return_sequences:
+                  type: integer
+                  example: 1
+              required:
+                - text_inputs
+              example:
+                text_inputs: My name is Teven and I am
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: [
+                 "My name is Teven and I am a student at the University of California, Berkeley. I am"
+                ] 
+        '400':
+          description: Bad Request
+        '500':
+          description: Server side error
+tags:
+- name: Inference
