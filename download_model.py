@@ -28,7 +28,11 @@ def define_arg_parser() -> Namespace:
 
 def main(config: Namespace):
     try:
-        model = AutoModelForCausalLM.from_pretrained(config.pretrained_model_name_or_path, revision=config.revision)
+        model = AutoModelForCausalLM.from_pretrained(
+            config.pretrained_model_name_or_path,
+            revision=config.revision,
+            low_cpu_mem_usage=True
+        )
         tokenizer = AutoTokenizer.from_pretrained(config.pretrained_model_name_or_path, revision=config.revision)
         model.save_pretrained(config.output_dir)
         tokenizer.save_pretrained(config.output_dir)
