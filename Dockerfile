@@ -12,19 +12,15 @@ ENV LRU_CACHE_CAPACITY=1
 # Install transformers
 RUN pip install transformers==4.15.0
 
-# Download Model
-COPY ./download_model.py ./donwload_model.py
-RUN python donwload_model.py --pretrained_model_name_or_path "${PRETRAINED_MODEL_NAME_OR_PATH}" --revision "${REVISION}" && rm donwload_model.py
-
-# Archieve Model
-COPY ./handler.py ./handler.py
-RUN torch-model-archiver --model-name text-generation --version 1.0 --serialized-file ./model/pytorch_model.bin --handler ./handler.py --extra-files ./model
-
-
 RUN echo default_workers_per_model=1 >> /home/model-server/config.properties
 RUN echo default_response_timeout=3600 >> /home/model-server/config.properties
 RUN echo unregister_model_timeout=3600 >> /home/model-server/config.properties
 
-EXPOSE 8080
+# Copy Code
+COPY ./download_model.py ./donwload_model.py
+COPY ./handler.py ./handler.py
 
-CMD ["torchserve", "--start", "--ncs", "--model-store=./", "--models=./text-generation.mar"]
+# Run
+EXPOSE 8080
+COPY ./run.sh ./run.sh
+CMD ./run.sh
