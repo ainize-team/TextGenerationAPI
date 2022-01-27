@@ -23,4 +23,5 @@ COPY ./handler.py ./handler.py
 # Run
 EXPOSE 8080
 COPY ./run.sh ./run.sh
+RUN chmod +x ./run.sh
 CMD ./run.sh

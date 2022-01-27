@@ -8,6 +8,7 @@ then
   exit 1
 fi
 
+echo "Archive Model"
 torch-model-archiver --model-name text-generation --version 1.0 --serialized-file ./model/pytorch_model.bin --handler ./handler.py --extra-files ./model
 
 if [ $? -ne 0 ]
@@ -16,4 +17,5 @@ then
   exit 1
 fi
 
+echo "Run API Server"
 torchserve --start --ncs --model-store=./ --models=./text-generation.mar
