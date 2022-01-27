@@ -4,7 +4,7 @@ FROM pytorch/torchserve:0.5.2-gpu
 USER root
 
 # Setting ENV value you want to deploy.
-ENV PRETRAINED_MODEL_NAME_OR_PATH="gpt2"
+ENV PRETRAINED_MODEL_NAME_OR_PATH="EleutherAI/gpt-neo-1.3B"
 ENV REVISION="main"
 
 ENV LRU_CACHE_CAPACITY=1
