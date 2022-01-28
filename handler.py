@@ -51,7 +51,7 @@ class TextGenerationHandler(BaseHandler):
     def preprocess(self, requests):
         return {
             "text_inputs": requests[0].get("body").get("text_inputs"),
-            "length": requests[0].get("body").get("text_inputs"),
+            "length": requests[0].get("body").get("length", None),
             "do_sample": requests[0].get("body").get("do_sample", None),
             "early_stopping": requests[0].get("body").get("early_stopping", None),
             "num_beams": requests[0].get("body").get("num_beams", None),
