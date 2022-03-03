@@ -1,5 +1,5 @@
-#FROM pytorch/torchserve:0.5.2-cpu
-FROM pytorch/torchserve:0.5.2-gpu
+#FROM pytorch/torchserve:0.5.3-cpu
+FROM pytorch/torchserve:0.5.3-gpu
 
 USER root
 
