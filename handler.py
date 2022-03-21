@@ -51,8 +51,7 @@ class TextGenerationHandler(BaseHandler):
     def preprocess(self, requests):
         return {
             "text_inputs": requests[0].get("body").get("text_inputs"),
-            "max_length": requests[0].get("body").get("max_length", None),
-            "min_length": requests[0].get("body").get("min_length", None),
+            "length": requests[0].get("body").get("length", None),
             "do_sample": requests[0].get("body").get("do_sample", None),
             "early_stopping": requests[0].get("body").get("early_stopping", None),
             "num_beams": requests[0].get("body").get("num_beams", None),
@@ -76,15 +75,21 @@ class TextGenerationHandler(BaseHandler):
         if self.device.type == "cuda":
             inputs = inputs.to(self.device, non_blocking=True)
         data["inputs"] = inputs
+        del data["text_inputs"]
+        if data["length"] is None:
+            data["max_length"] = None
+            data["min_length"] = None
+        else:
+            data["max_length"] = data["length"] + data["inputs"].shape[1]
+            data["min_length"] = data["length"] + data["inputs"].shape[1]
+        del data["length"]
+
         if data["max_length"] and data["max_length"] > self.model_max_length:
             logger.warning(f"change max_length from {data['max_length']} to {self.model_max_length}")
             data["max_length"] = self.model_max_length
         if data["min_length"] and data["min_length"] > self.model_max_length:
             logger.warning(f"change max_length from {data['min_length']} to {self.model_max_length}")
             data["min_length"] = self.model_max_length
-        if data["min_length"] and data["max_length"] and data["min_length"] > data["max_length"]:
-            logger.warning(f"change min_length from {data['min_length']} to {data['max_length']}")
-            data["min_length"] = data['max_length']
         inference_output = self.model.generate(**data).to("cpu").tolist()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
